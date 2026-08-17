@@ -1,0 +1,28 @@
+{
+  "name": "PICKFIT",
+  "short_name": "PICKFIT",
+  "description": "내 옷을 저장해두고 오늘 기온과 상황에 맞는 코디를 골라주는 앱",
+  "lang": "ko",
+  "dir": "ltr",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f4f1",
+  "theme_color": "#4f7f6c",
+  "categories": ["lifestyle", "utilities"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

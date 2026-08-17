@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 140" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+  <defs>
+    <path id="pf-hanger" d="M0 46L-16.5 57.5C-18.4 58.8 -17.5 61.5 -15.2 61.5H15.2C17.5 61.5 18.4 58.8 16.5 57.5Z M0 46V39.4C0 36.2 5.4 35.6 6.3 39C6.9 41.5 5.1 43.3 2.9 43.5"/>
+  </defs>
+
+  <ellipse cx="100" cy="125" rx="64" ry="5" fill="currentColor" stroke="none" opacity="0.07"/>
+
+  <path d="M22 42H178" stroke-width="2.8" opacity="0.9"/>
+
+  <g stroke-width="2.4" opacity="0.6">
+    <path d="M34 43.5V116"/>
+    <path d="M166 43.5V116"/>
+    <path d="M24 116H44"/>
+    <path d="M156 116H176"/>
+  </g>
+
+  <path d="M34 100H166" stroke-width="2.2" opacity="0.2"/>
+
+  <use href="#pf-hanger" transform="translate(58 0)" stroke-width="2.4" opacity="0.85"/>
+  <use href="#pf-hanger" transform="translate(97 0) rotate(-3 0 42)" stroke-width="2.4" opacity="0.55"/>
+  <use href="#pf-hanger" transform="translate(136 0)" stroke-width="2.4" opacity="0.3"/>
+</svg>

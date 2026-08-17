@@ -1,0 +1,247 @@
+/* ============================================================
+   PICKFIT — theme.css
+   디자인 토큰의 "값"만 정의합니다.
+   레이아웃/선택자/규칙은 여기에 쓰지 않습니다.
+   이 파일만 교체하면 앱 전체 룩이 바뀌어야 합니다.
+   ============================================================ */
+
+:root {
+  color-scheme: light dark;
+
+  /* ---------- Typography ---------------------------------- */
+  /* 웹폰트 다운로드 없음: 기기에 Pretendard가 설치돼 있으면 사용, 없으면 시스템 폰트 */
+  --font-sans:
+    "Pretendard Variable", Pretendard,
+    -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "SF Pro Text",
+    "Segoe UI", "Malgun Gothic",
+    system-ui, Roboto, "Noto Sans KR", "Helvetica Neue", Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --fs-xxs: 11px;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 15px;
+  --fs-lg: 17px;
+  --fs-xl: 20px;
+  --fs-2xl: 24px;
+  --fs-display: 30px;
+  --fs-art: 44px;          /* empty/done 이모지 아트 */
+  --fs-icon: 18px;         /* iconbtn, tab 아이콘 */
+  --fs-temp: 40px;         /* 날씨 기온 숫자 */
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  --lh-none: 1;
+  --lh-tight: 1.2;
+  --lh-snug: 1.35;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.7;
+
+  --ls-tight: -0.01em;
+  --ls-normal: 0;
+  --ls-wide: 0.02em;
+
+  /* ---------- Color : 표면 ------------------------------- */
+  --c-bg: #f5f4f1;          /* 앱 바닥 (따뜻한 뉴트럴) */
+  --c-surface: #ffffff;     /* 카드/시트 */
+  --c-surface-2: #faf9f6;   /* 살짝 눌린 보조 표면 */
+  --c-sunken: #eeece7;      /* 트랙, 빈 영역 */
+  --c-tint: #f1efea;        /* 누끼 썸네일 뒤 옅은 배경 */
+
+  /* ---------- Color : 글자 ------------------------------- */
+  --c-ink: #1b1a17;         /* 본문 */
+  --c-ink-2: #5f5c55;       /* 보조 */
+  --c-ink-3: #8f8b82;       /* 흐린 캡션 */
+  --c-ink-on-fill: #ffffff; /* 채워진 면 위 글자 */
+
+  /* ---------- Color : 선 --------------------------------- */
+  --c-line: #e3e0d9;
+  --c-line-strong: #cdc9c0;
+
+  /* ---------- Color : 강조 ------------------------------- */
+  --c-primary: #23221f;         /* 주 버튼 = 잉크 톤 (차분) */
+  --c-primary-hover: #3a3833;
+  --c-primary-ink: #ffffff;
+  --c-accent: #4f7f6c;          /* 선택 상태·진행·포커스 (세이지) */
+  --c-accent-soft: #e5eeea;
+  --c-accent-ink: #2f5b4b;
+
+  /* ---------- Color : 의미 ------------------------------- */
+  --c-danger: #a8362b;
+  --c-danger-soft: #f8e9e6;
+  --c-danger-ink: #8e2c22;
+  --c-warn-soft: #f7efdd;
+  --c-warn-ink: #7a5a17;
+  --c-warn-line: #e0c68f;
+  --c-fail-bg: #fdf5f3;         /* 누끼 실패 카드 바탕 */
+  --c-fail-line: #e6bfb7;
+  /* 정보 톤 — 경고가 아닌 담담한 고백/힌트용 (조건 완화, 옷장 힌트) */
+  --c-info-soft: #ecefef;
+  --c-info-ink: #55636b;
+
+  /* ---------- Color : 오버레이/특수 ---------------------- */
+  --c-transparent: transparent;
+  --c-current: currentColor;    /* 마스크 아이콘은 주변 글자색을 그대로 따라간다 */
+  --c-scrim: rgba(24, 22, 18, 0.44);
+  --c-toast-bg: #23221f;
+  --c-toast-ink: #f7f6f3;
+  --c-focus: #4f7f6c;
+  --c-skeleton: #ebe8e2;
+
+  /* 누끼 확인용 체크무늬 */
+  --c-checker-a: #ffffff;
+  --c-checker-b: #e8e5de;
+  --checker-size: 14px;
+  --checker-size-sm: 8px;   /* 작은 썸네일용 */
+
+  /* ---------- Radius ------------------------------------- */
+  --radius-xs: 6px;
+  --radius-sm: 9px;
+  --radius-md: 13px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+  --radius-round: 50%;
+
+  /* ---------- Elevation ---------------------------------- */
+  --shadow-0: none;
+  --shadow-1: 0 1px 2px rgba(28, 25, 20, 0.06);
+  --shadow-2: 0 2px 8px rgba(28, 25, 20, 0.08);
+  --shadow-3: 0 8px 24px rgba(28, 25, 20, 0.12);
+  --shadow-fab: 0 6px 18px rgba(28, 25, 20, 0.22);
+  --shadow-card: 0 4px 16px rgba(28, 25, 20, 0.10);
+  --shadow-toast: 0 8px 28px rgba(0, 0, 0, 0.28);
+  --shadow-tabbar: 0 -1px 0 var(--c-line);
+  --ring-focus: 0 0 0 3px rgba(79, 127, 108, 0.32);
+
+  /* ---------- Spacing scale ------------------------------ */
+  --sp-0: 0px;
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-7: 32px;
+  --sp-8: 40px;
+  --sp-9: 56px;
+
+  /* ---------- Sizing / layout 상수 ----------------------- */
+  --app-max-w: 480px;       /* 데스크톱에서의 폰 컬럼 폭 */
+  --gutter: var(--sp-4);    /* 좌우 기본 여백 */
+  --tap-min: 44px;          /* 최소 터치 타겟 */
+  --tabbar-h: 58px;
+  --topbar-h: 52px;
+  --fab-size: 56px;
+  --grid-min: 104px;        /* 옷장 그리드 최소 카드 폭 → 2~3열 */
+  --border-w: 1px;
+  --border-w-strong: 2px;
+  --spinner-size: 38px;
+  --spinner-w: 3px;
+  --bar-h: 6px;
+  --stack-ratio: 3 / 4;     /* 카드 스택 비율 */
+  --stack-peek-y: 10px;     /* depth 1장당 아래로 내려가는 오프셋 */
+  --stack-peek-scale: 0.04; /* depth 1장당 축소량 */
+  --stack-peek-fade: 0.16;  /* depth 1장당 투명해지는 양 */
+  --qcard-img-h: 42%;       /* 확정 카드에서 이미지가 차지하는 높이 비율 */
+  --qcard-img-h-tall: 48%;  /* 세로 여유가 있는 화면에서 */
+  --swatch-size: 18px;      /* 색 견본 */
+  --slider-track-h: 6px;
+  --slider-thumb: 26px;
+  --chip-n-size: 18px;      /* 칩 개수 배지 */
+  --rotatebtn-size: 42px;   /* 회전 버튼 */
+
+  /* 마스크 아이콘·일러스트 (SVG는 assets/ 에서 참조 — 파일을 덮어쓰면 그대로 교체됨) */
+  --ico-size: 20px;         /* 기본 아이콘 */
+  --ico-size-tab: 23px;     /* 하단 탭 (선이 뭉개지지 않는 크기) */
+  --ico-size-cat: 28px;     /* 묶음 카테고리 버튼 */
+  --art-empty-w: 200px;     /* 빈 옷장 일러스트 (viewBox 200×140) */
+  --art-empty-h: 140px;
+  --art-empty-ratio: 200 / 140;
+  --art-opacity: 0.72;      /* 일러스트 전체 톤 낮추기 */
+  --logo-h: 22px;           /* 워드마크 (viewBox 170×32) */
+  --logo-w: 117px;
+  --logo-ratio: 170 / 32;
+  --sheet-enter-y: 7%;      /* 시트가 아래에서 올라오는 거리 */
+  --toast-enter-y: 12px;
+  --outfit-enter-y: 12px;   /* 코디 카드 등장 거리 */
+  --stagger: 70ms;          /* 코디 카드 순차 등장 간격 */
+
+  /* ---------- Motion ------------------------------------- */
+  --dur-1: 110ms;   /* 눌림 등 즉각 반응 */
+  --dur-2: 200ms;   /* 일반 상태 전환 */
+  --dur-3: 300ms;   /* 시트·카드 복귀 */
+  --dur-4: 480ms;   /* 진행바 */
+  --dur-spin: 800ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-emphasized: cubic-bezier(0.2, 0.9, 0.2, 1);
+
+  /* ---------- Opacity ------------------------------------ */
+  --op-press: 0.62;
+  --op-disabled: 0.4;
+  --op-muted: 0.72;   /* 비활성 탭 아이콘 등 */
+}
+
+/* ============================================================
+   Dark mode — 토큰 값만 다시 정의 (base.css는 손대지 않음)
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-bg: #121211;
+    --c-surface: #1c1c1a;
+    --c-surface-2: #232321;
+    --c-sunken: #2a2a27;
+    --c-tint: #262623;
+
+    --c-ink: #ecebe6;
+    --c-ink-2: #b3b0a8;
+    --c-ink-3: #84817a;
+    --c-ink-on-fill: #17170f;
+
+    --c-line: #2e2e2b;
+    --c-line-strong: #43423e;
+
+    --c-primary: #ece9e2;
+    --c-primary-hover: #ffffff;
+    --c-primary-ink: #1b1a17;
+    --c-accent: #85b8a4;
+    --c-accent-soft: #22322c;
+    --c-accent-ink: #a9d3c2;
+
+    --c-danger: #e08579;
+    --c-danger-soft: #3a221f;
+    --c-danger-ink: #eda093;
+    --c-warn-soft: #352d1a;
+    --c-warn-ink: #e0c489;
+    --c-warn-line: #6b552a;
+    --c-fail-bg: #2a1e1c;
+    --c-fail-line: #5c3a34;
+    --c-info-soft: #23282b;
+    --c-info-ink: #a9b7bd;
+
+    --c-scrim: rgba(0, 0, 0, 0.6);
+    --c-toast-bg: #ecebe6;
+    --c-toast-ink: #1b1a17;
+    --c-focus: #85b8a4;
+    --c-skeleton: #262624;
+
+    /* 투명 영역과 어두운 옷이 구분되도록 대비를 올리되, 옷보다 튀지는 않게 */
+    --c-checker-a: #3d3d39;
+    --c-checker-b: #262623;
+
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-2: 0 2px 8px rgba(0, 0, 0, 0.45);
+    --shadow-3: 0 8px 24px rgba(0, 0, 0, 0.55);
+    --shadow-fab: 0 6px 18px rgba(0, 0, 0, 0.6);
+    --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.5);
+    --shadow-toast: 0 8px 28px rgba(0, 0, 0, 0.6);
+    --ring-focus: 0 0 0 3px rgba(133, 184, 164, 0.32);
+  }
+}

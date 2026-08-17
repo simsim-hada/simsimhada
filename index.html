@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4f7f6c">
+<title>PICKFIT</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PICKFIT">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===== 옷장 ===== -->
+  <section class="view" id="view-closet" data-view="closet">
+    <header class="topbar">
+      <h1 class="wordmark"><span class="logo" data-art="logo" role="img" aria-label="PICKFIT"></span></h1>
+      <span class="topbar-sub" id="closet-count"></span>
+    </header>
+
+    <div class="banner" id="retake-banner" hidden></div>
+
+    <div class="chiprow" id="closet-filter"></div>
+
+    <p class="gap-note" id="gap-note" hidden></p>
+
+    <div class="grid" id="closet-grid"></div>
+
+    <div class="empty" id="closet-empty" hidden>
+      <span class="art" data-art="empty-closet" role="img" aria-label="빈 옷장"></span>
+      <p class="empty-title">옷장이 비어 있어요</p>
+      <p class="empty-desc">사진을 몰아서 찍고 한 번에 등록해보세요.<br>자주 입는 20벌이면 충분합니다.</p>
+      <button class="btn btn-primary" data-act="open-add">옷 추가하기</button>
+    </div>
+
+    <button class="fab" data-act="open-add" aria-label="옷 추가">+</button>
+  </section>
+
+  <!-- ===== 오늘 ===== -->
+  <section class="view" id="view-today" data-view="today" hidden>
+    <header class="topbar">
+      <h1 class="topbar-title">오늘 코디</h1>
+      <span class="topbar-sub" id="today-date"></span>
+    </header>
+
+    <div class="weather">
+      <button class="weather-main" data-act="weather-refresh">
+        <span class="weather-emoji" id="weather-emoji">🌤️</span>
+        <span class="weather-temp" id="weather-temp">--°</span>
+        <span class="weather-label" id="weather-label">기온 확인 중</span>
+      </button>
+      <p class="weather-src" id="weather-src"></p>
+      <div class="temp-manual" id="temp-manual" hidden>
+        <label class="temp-manual-label">기온을 직접 정해주세요 <b class="temp-manual-val" id="temp-manual-val">15°</b></label>
+        <input class="slider" type="range" min="-15" max="38" value="15" data-act="set-temp">
+      </div>
+    </div>
+
+    <div class="chiprow" id="tpo-filter"></div>
+
+    <p class="relaxed-note" id="relaxed-note" hidden></p>
+
+    <div class="outfits" id="outfits"></div>
+
+    <div class="shortage" id="shortage" hidden></div>
+  </section>
+
+  <!-- ===== 설정 ===== -->
+  <section class="view" id="view-settings" data-view="settings" hidden>
+    <header class="topbar">
+      <h1 class="topbar-title">설정</h1>
+    </header>
+
+    <p class="backup-warn" id="backup-warn" hidden></p>
+
+    <div class="install-tip" id="install-tip" hidden>
+      <p class="install-tip-title">홈 화면에 추가하면 앱처럼 열려요</p>
+      <p class="install-tip-desc" id="install-tip-desc">공유 버튼 → “홈 화면에 추가”를 눌러주세요</p>
+      <button class="btn btn-primary" data-act="install" hidden id="install-btn">홈 화면에 추가</button>
+    </div>
+
+    <div class="rows">
+      <div class="row">
+        <div class="row-main">
+          <span class="row-label">백업 내보내기</span>
+          <span class="row-desc" id="export-desc">옷 사진과 기록을 ZIP 파일로 저장합니다</span>
+        </div>
+        <button class="btn btn-ghost" data-act="export">내보내기</button>
+      </div>
+      <div class="row">
+        <div class="row-main">
+          <span class="row-label">백업 복원</span>
+          <span class="row-desc">내보낸 ZIP 파일에서 되살립니다</span>
+        </div>
+        <label class="btn btn-ghost">
+          복원
+          <input type="file" accept=".zip,application/zip" hidden id="file-restore">
+        </label>
+      </div>
+      <div class="row">
+        <div class="row-main">
+          <span class="row-label">영구 저장</span>
+          <span class="row-desc" id="persist-desc">확인 중…</span>
+        </div>
+        <button class="btn btn-ghost" data-act="persist" id="persist-btn">켜기</button>
+      </div>
+      <div class="row">
+        <div class="row-main">
+          <span class="row-label">저장 용량</span>
+          <span class="row-desc" id="storage-desc">확인 중…</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-main">
+          <span class="row-label">다시 찍을 사진</span>
+          <span class="row-desc" id="retake-desc">0장</span>
+        </div>
+        <button class="btn btn-ghost" data-act="clear-retakes">비우기</button>
+      </div>
+      <div class="row">
+        <div class="row-main">
+          <span class="row-label">샘플 데이터 넣기</span>
+          <span class="row-desc">개발용 더미 옷 12벌을 추가합니다</span>
+        </div>
+        <button class="btn btn-ghost" data-act="seed">추가</button>
+      </div>
+      <div class="row">
+        <div class="row-main">
+          <span class="row-label danger">전체 초기화</span>
+          <span class="row-desc">등록한 옷과 기록을 모두 지웁니다</span>
+        </div>
+        <button class="btn btn-danger" data-act="reset">초기화</button>
+      </div>
+    </div>
+
+    <p class="notice">
+      이 앱은 사진을 <b>이 기기에만</b> 저장합니다.<br>
+      기기를 바꾸거나 브라우저 데이터를 지우면 사라지니 가끔 백업해주세요.
+      <span class="notice-dim" id="sw-note"></span>
+    </p>
+  </section>
+
+  <!-- ===== 하단 탭 ===== -->
+  <nav class="tabbar">
+    <button class="tab is-on" data-tab="closet"><span class="ico" data-ico="tab-closet"></span>옷장</button>
+    <button class="tab" data-tab="today"><span class="ico" data-ico="tab-today"></span>오늘</button>
+    <button class="tab" data-tab="settings"><span class="ico" data-ico="tab-settings"></span>설정</button>
+  </nav>
+</div>
+
+
+<!-- ===== 옷 추가 시트 ===== -->
+<div class="sheet" id="sheet-add" hidden>
+  <header class="sheet-bar">
+    <button class="iconbtn" data-act="close-add">✕</button>
+    <span class="sheet-title" id="add-title">옷 추가</span>
+    <span class="sheet-right" id="add-step"></span>
+  </header>
+
+  <!-- step 1 : 묶음 카테고리 -->
+  <div class="step" id="add-step-cat">
+    <p class="step-lead">
+      <b>이번에 넣을 사진은 전부 어떤 종류인가요?</b><br>
+      먼저 정해두면 사진마다 고를 필요가 없습니다.
+    </p>
+    <div class="catgrid" id="batch-cat"></div>
+    <button class="btn btn-ghost btn-wide" data-act="cat-mixed">종류가 섞여 있어요</button>
+  </div>
+
+  <!-- step 2 : 사진 투입 -->
+  <div class="step" id="add-step-pick" hidden>
+    <p class="step-lead">
+      <b id="pick-lead">사진을 골라주세요</b><br>
+      여러 장을 한 번에 선택할 수 있습니다.
+    </p>
+
+    <div class="tips">
+      <div class="tip"><span class="tip-n">1</span><span class="tip-t">단색 이불·수건 위에 놓고 찍어주세요. <b>배경이 단색이어야 합니다.</b></span></div>
+      <div class="tip"><span class="tip-n">2</span><span class="tip-t">어두운 옷엔 밝은 배경, 밝은 옷엔 어두운 배경으로. <b>색이 비슷하면 배경을 못 지웁니다.</b></span></div>
+      <div class="tip"><span class="tip-n">3</span><span class="tip-t">옷 주변에 여백을 남기고 위에서 한 장씩.</span></div>
+    </div>
+
+    <label class="btn btn-primary btn-wide">
+      사진 선택 (여러 장)
+      <input type="file" accept="image/*" multiple hidden id="file-pick">
+    </label>
+    <label class="btn btn-ghost btn-wide">
+      카메라로 촬영
+      <input type="file" accept="image/*" capture="environment" hidden id="file-shot">
+    </label>
+  </div>
+
+  <!-- step 3 : 처리 중 -->
+  <div class="step" id="add-step-proc" hidden>
+    <div class="proc">
+      <div class="spinner"></div>
+      <p class="proc-text" id="proc-text">사진을 분석하고 있어요</p>
+      <div class="bar"><div class="bar-fill" id="proc-bar"></div></div>
+      <p class="proc-sub" id="proc-sub"></p>
+    </div>
+  </div>
+
+  <!-- step 4 : 확정 스택 -->
+  <div class="step" id="add-step-cards" hidden>
+    <div class="stackwrap">
+      <div class="stack" id="card-stack"></div>
+    </div>
+    <div class="stackbar">
+      <button class="btn btn-ghost" data-act="card-drop">버리기</button>
+      <button class="btn btn-primary" data-act="card-keep">저장</button>
+    </div>
+    <button class="btn btn-link btn-wide" data-act="keep-all">남은 것 전부 저장</button>
+  </div>
+
+  <!-- step 5 : 요약 -->
+  <div class="step" id="add-step-done" hidden>
+    <div class="done">
+      <div class="done-art">✅</div>
+      <p class="done-title" id="done-title"></p>
+      <p class="done-desc" id="done-desc"></p>
+      <button class="btn btn-primary btn-wide" data-act="close-add">옷장으로</button>
+      <button class="btn btn-ghost btn-wide" data-act="add-more">사진 더 넣기</button>
+    </div>
+  </div>
+
+  <input type="file" accept="image/*" hidden id="file-replace">
+</div>
+
+
+<!-- ===== 아이템 상세 ===== -->
+<div class="sheet" id="sheet-detail" hidden>
+  <header class="sheet-bar">
+    <button class="iconbtn" data-act="close-detail">✕</button>
+    <span class="sheet-title">옷 정보</span>
+    <button class="iconbtn danger" data-act="delete-item">🗑</button>
+  </header>
+  <div class="detail" id="detail-body"></div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

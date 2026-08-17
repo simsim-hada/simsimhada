@@ -1,0 +1,1565 @@
+/* ============================================================
+   PICKFIT — base.css
+   레이아웃 골격만 정의합니다.
+   색·폰트·그림자·반경 값은 절대 직접 쓰지 않고 theme.css의 토큰만 참조합니다.
+   ============================================================ */
+
+/* ---------- 1. 최소 리셋 ---------------------------------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior-y: none;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;   /* 폴백 */
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+  color: var(--c-ink);
+  background: var(--c-sunken);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: var(--c-transparent);
+  overscroll-behavior-y: none;
+}
+
+h1, h2, h3, p, figure { margin: 0; }
+img { display: block; max-width: 100%; }
+
+/* 폼 요소만 최소 초기화.
+   label로 만든 버튼은 여기서 다루지 않는다 — 예전에 `label.btn`(0,1,1)을 넣었더니
+   `.btn-primary`(0,1,0)의 color를 이겨서 label 버튼만 글자색을 잃었다.
+   .btn의 글자색·폰트는 전적으로 .btn 규칙에서 정한다. */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  margin: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: var(--c-transparent);
+}
+
+b, strong { font-weight: var(--fw-semibold); }
+
+:focus-visible {
+  outline: var(--border-w-strong) solid var(--c-focus);
+  outline-offset: 2px;
+}
+
+/* JS가 붙이는 hidden은 무엇보다 우선한다 */
+[hidden] { display: none !important; }
+
+
+/* ---------- 2. 앱 셸 -------------------------------------- */
+.app {
+  position: relative;
+  width: 100%;
+  max-width: var(--app-max-w);
+  min-height: 100vh;   /* 폴백 */
+  min-height: 100dvh;
+  margin-inline: auto;
+  background: var(--c-bg);
+  padding-bottom: calc(
+    var(--tabbar-h) + var(--sp-6) + env(safe-area-inset-bottom, 0px)
+  );
+}
+
+@media (min-width: 520px) {
+  .app { border-inline: var(--border-w) solid var(--c-line); }
+}
+
+.view {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--tabbar-h));   /* 폴백 */
+  min-height: calc(100dvh - var(--tabbar-h));
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+
+/* ---------- 3. 상단바 (스크롤되는 헤더) -------------------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: var(--topbar-h);
+  padding: var(--sp-5) var(--gutter) var(--sp-3);
+}
+
+/* 이제 안에 로고 마스크만 들어간다 (텍스트 스타일은 필요 없음) */
+.wordmark {
+  display: flex;
+  align-items: center;
+  line-height: var(--lh-none);
+  color: var(--c-ink);
+}
+
+.topbar-title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-tight);
+}
+
+.topbar-sub {
+  margin-inline-start: auto;
+  font-size: var(--fs-sm);
+  color: var(--c-ink-3);
+}
+
+
+/* ---------- 4. 배너 --------------------------------------- */
+.banner {
+  margin: var(--sp-2) var(--gutter) var(--sp-1);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--radius-md);
+  border-inline-start: var(--border-w-strong) solid var(--c-warn-ink);
+  background: var(--c-warn-soft);
+  color: var(--c-warn-ink);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+}
+
+/* 배너 안 링크 버튼은 문장 흐름에 붙는다 */
+.banner .btn-link {
+  display: inline-flex;
+  min-height: var(--sp-6);
+  margin-inline-start: var(--sp-2);
+  padding: var(--sp-0);
+  vertical-align: baseline;
+  color: var(--c-warn-ink);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+}
+
+
+/* ---------- 5. 칩 줄 (가로 스크롤) ------------------------ */
+.chiprow {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--gutter) var(--sp-3);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.chiprow::-webkit-scrollbar { display: none; }
+
+.chip {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: var(--sp-7);
+  padding: var(--sp-2) var(--sp-4);
+  scroll-snap-align: start;
+  white-space: nowrap;
+  border: var(--border-w) solid var(--c-line);
+  border-radius: var(--radius-pill);
+  background: var(--c-surface);
+  color: var(--c-ink-2);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  transition:
+    background var(--dur-1) var(--ease-standard),
+    color var(--dur-1) var(--ease-standard),
+    border-color var(--dur-1) var(--ease-standard);
+}
+
+.chip.is-on {
+  border-color: var(--c-primary);
+  background: var(--c-primary);
+  color: var(--c-primary-ink);
+  font-weight: var(--fw-semibold);
+}
+
+.chip:active { opacity: var(--op-press); }
+
+/* 칩 라벨 뒤 개수 배지 */
+.chip-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--chip-n-size);
+  height: var(--chip-n-size);
+  padding-inline: var(--sp-1);
+  border-radius: var(--radius-pill);
+  background: var(--c-sunken);
+  color: var(--c-ink-3);
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-none);
+}
+
+.chip.is-on .chip-n {
+  background: var(--c-primary-ink);
+  color: var(--c-primary);
+}
+
+
+/* ---------- 6. 옷장 그리드 -------------------------------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--grid-min), 1fr));
+  gap: var(--sp-3);
+  padding: var(--sp-1) var(--gutter) var(--sp-6);
+}
+
+/* 옷장 카드 (button) — 투명 PNG가 잘 보이도록 체크무늬 위에 올린다 */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--sp-2);
+  padding: var(--sp-2);
+  overflow: hidden;
+  border: var(--border-w) solid var(--c-line);
+  border-radius: var(--radius-md);
+  background: var(--c-surface);
+  box-shadow: var(--shadow-1);
+  text-align: center;
+  transition: transform var(--dur-1) var(--ease-standard);
+}
+
+.card:active { transform: scale(0.97); }
+
+.card-img {
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  --checker-size: var(--checker-size-sm);
+}
+
+.card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.card-meta {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: var(--sp-0);
+  min-width: 0;
+  padding-inline: var(--sp-1);
+  text-align: start;
+}
+
+.card-cat,
+.card-color {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: var(--lh-snug);
+}
+
+.card-cat {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-medium);
+  color: var(--c-ink-3);
+}
+
+.card-color {
+  font-size: var(--fs-xs);
+  color: var(--c-ink-2);
+}
+
+/* 필터 결과가 0개일 때 그리드 자리에 들어가는 안내 */
+.grid-empty {
+  grid-column: 1 / -1;
+  padding: var(--sp-8) var(--sp-4);
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--c-ink-3);
+}
+
+
+/* ---------- 7. 빈 상태 ------------------------------------ */
+.empty {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-8) var(--sp-6) var(--sp-9);
+  text-align: center;
+}
+
+/* 빈 옷장 일러스트 자리 (예전 .empty-art 이모지 규칙은 .art 로 대체됨) */
+.empty .art { margin-bottom: var(--sp-2); }
+
+.empty-title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  color: var(--c-ink);
+}
+
+.empty-desc {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--c-ink-3);
+}
+
+.empty .btn { margin-top: var(--sp-4); min-width: 60%; }
+
+
+/* ---------- 8. 설정 리스트 -------------------------------- */
+.rows {
+  display: flex;
+  flex-direction: column;
+  margin: var(--sp-2) var(--gutter) var(--sp-5);
+  overflow: hidden;
+  border: var(--border-w) solid var(--c-line);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-height: var(--sp-9);
+  padding: var(--sp-4);
+}
+
+.row + .row { border-top: var(--border-w) solid var(--c-line); }
+
+.row-main {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 0;
+}
+
+.row-label {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  color: var(--c-ink);
+}
+
+.row-label.danger { color: var(--c-danger); }
+
+.row-desc {
+  font-size: var(--fs-xs);
+  line-height: var(--lh-snug);
+  color: var(--c-ink-3);
+}
+
+.row .btn { flex: 0 0 auto; }
+
+.notice {
+  margin: 0 var(--gutter) var(--sp-8);
+  padding: var(--sp-4);
+  border-radius: var(--radius-md);
+  background: var(--c-surface-2);
+  border: var(--border-w) solid var(--c-line);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-relaxed);
+  color: var(--c-ink-2);
+}
+
+.notice-dim { color: var(--c-ink-3); }
+
+
+/* ---------- 9. FAB ---------------------------------------- */
+.fab {
+  position: fixed;
+  z-index: 30;
+  right: max(var(--gutter), calc(50% - var(--app-max-w) / 2 + var(--gutter)));
+  bottom: calc(var(--tabbar-h) + var(--sp-4) + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--fab-size);
+  height: var(--fab-size);
+  border-radius: var(--radius-round);
+  background: var(--c-primary);
+  color: var(--c-primary-ink);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-none);
+  box-shadow: var(--shadow-fab);
+  transition: transform var(--dur-1) var(--ease-standard);
+}
+
+.fab:active { transform: scale(0.94); }
+
+
+/* ---------- 10. 하단 탭바 (고정) --------------------------- */
+.tabbar {
+  position: fixed;
+  z-index: 40;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  display: flex;
+  width: 100%;
+  max-width: var(--app-max-w);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: var(--c-surface);
+  box-shadow: var(--shadow-tabbar);
+}
+
+.tab {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  min-height: var(--tabbar-h);
+  padding: var(--sp-2) var(--sp-1);
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-medium);
+  color: var(--c-ink-3);
+  transition: color var(--dur-1) var(--ease-standard);
+}
+
+/* 탭 아이콘은 마스크(.ico) — 색은 .tab 의 글자색을 따라간다 (예전 .tab-ico 규칙 대체) */
+.tab .ico {
+  width: var(--ico-size-tab);
+  height: var(--ico-size-tab);
+  opacity: var(--op-muted);
+  transition: opacity var(--dur-1) var(--ease-standard);
+}
+
+.tab.is-on { color: var(--c-ink); font-weight: var(--fw-semibold); }
+.tab.is-on .ico { opacity: 1; }
+
+
+/* ---------- 11. 버튼 -------------------------------------- */
+/* <button> 과 <label class="btn"> 이 완전히 같게 보이도록 .btn 이 폰트·색을 모두 정한다 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: var(--tap-min);
+  margin: var(--sp-0);
+  padding: var(--sp-2) var(--sp-5);
+  border: var(--border-w) solid var(--c-transparent);
+  border-radius: var(--radius-pill);
+  background: var(--c-surface);
+  color: var(--c-ink);
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: var(--c-transparent);
+  transition:
+    background var(--dur-1) var(--ease-standard),
+    opacity var(--dur-1) var(--ease-standard),
+    transform var(--dur-1) var(--ease-standard);
+}
+
+.btn:active { transform: scale(0.98); opacity: var(--op-press); }
+.btn:disabled,
+.btn[aria-disabled="true"] { opacity: var(--op-disabled); pointer-events: none; }
+
+.btn-primary {
+  background: var(--c-primary);
+  color: var(--c-primary-ink);
+  box-shadow: var(--shadow-1);
+}
+
+.btn-ghost {
+  background: var(--c-surface);
+  border-color: var(--c-line-strong);
+  color: var(--c-ink);
+}
+
+.btn-danger {
+  background: var(--c-danger-soft);
+  color: var(--c-danger-ink);
+}
+
+.btn-link {
+  background: none;
+  border-color: var(--c-transparent);
+  color: var(--c-ink-2);
+  font-weight: var(--fw-medium);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.btn-wide {
+  display: flex;
+  width: 100%;
+}
+
+/* (부모가 모두 flex + gap 이라 별도 여백은 두지 않는다) */
+
+.iconbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  border-radius: var(--radius-round);
+  background: none;
+  color: var(--c-ink);
+  font-size: var(--fs-icon);
+  line-height: var(--lh-none);
+  transition: background var(--dur-1) var(--ease-standard);
+}
+
+.iconbtn:active { background: var(--c-sunken); }
+.iconbtn.danger { color: var(--c-danger); }
+
+
+/* ---------- 12. 시트 (전체 화면 오버레이) ------------------ */
+/* 모바일 브라우저는 주소창·툴바가 화면을 먹으므로 동적 뷰포트 높이를 쓴다.
+   (top/height 가 함께 지정되면 bottom 은 무시된다 — 의도한 동작) */
+.sheet {
+  position: fixed;
+  z-index: 60;
+  inset: 0;
+  height: 100vh;          /* 폴백 */
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  background: var(--c-bg);
+  animation: sheet-rise var(--dur-3) var(--ease-out) both;
+}
+
+@keyframes sheet-rise {
+  from { transform: translateY(var(--sheet-enter-y)); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.sheet-bar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  width: 100%;
+  max-width: var(--app-max-w);
+  margin-inline: auto;
+  padding: var(--sp-2) var(--sp-2);
+  padding-top: calc(var(--sp-2) + env(safe-area-inset-top, 0px));
+  background: var(--c-bg);
+  border-bottom: var(--border-w) solid var(--c-line);
+}
+
+.sheet-title {
+  flex: 1 1 auto;
+  text-align: center;
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  color: var(--c-ink);
+}
+
+.sheet-right {
+  flex: 0 0 auto;
+  min-width: var(--tap-min);
+  padding-inline-end: var(--sp-2);
+  text-align: end;
+  font-size: var(--fs-xs);
+  color: var(--c-ink-3);
+}
+
+/* 시트 안 각 단계 — 시트 높이를 채우고, 안에서 다시 세로 flex로 나눈다 */
+.step {
+  display: flex;
+  flex-direction: column;
+  /* 남는 높이는 채우되 내용보다 작게 줄어들지는 않는다
+     (긴 단계는 시트가 스크롤되고, 확정 카드 단계는 화면에 딱 맞는다) */
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: var(--app-max-w);
+  margin-inline: auto;
+  padding: var(--sp-5) var(--gutter);
+  padding-bottom: calc(var(--sp-5) + env(safe-area-inset-bottom, 0px));
+  gap: var(--sp-3);
+}
+
+.step-lead {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--c-ink-2);
+}
+
+.step-lead b {
+  display: inline-block;
+  margin-bottom: var(--sp-1);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  color: var(--c-ink);
+}
+
+
+/* ---------- 13. 카테고리 그리드 --------------------------- */
+.catgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--grid-min), 1fr));
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-2);
+}
+
+/* 아이콘 위 · 라벨 아래 세로 배치 */
+.catbtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: calc(var(--tap-min) + var(--sp-7));
+  padding: var(--sp-3) var(--sp-2);
+  border: var(--border-w) solid var(--c-line);
+  border-radius: var(--radius-md);
+  background: var(--c-surface);
+  color: var(--c-ink);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  text-align: center;
+  transition:
+    background var(--dur-1) var(--ease-standard),
+    border-color var(--dur-1) var(--ease-standard);
+}
+
+.catbtn:active { background: var(--c-surface-2); }
+
+.catbtn.is-on {
+  border-color: var(--c-accent);
+  background: var(--c-accent-soft);
+  color: var(--c-accent-ink);
+  font-weight: var(--fw-semibold);
+}
+
+
+/* ---------- 14. 촬영 팁 ----------------------------------- */
+.tips {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  border-radius: var(--radius-md);
+  background: var(--c-surface-2);
+  border: var(--border-w) solid var(--c-line);
+}
+
+/* 번호 배지 + 본문 두 덩어리. 본문은 .tip-t 안에서 한 흐름으로 줄바꿈된다 */
+.tip {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  color: var(--c-ink-2);
+}
+
+.tip-n {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--sp-5);
+  height: var(--sp-5);
+  /* 본문 첫 줄에 맞춰 위쪽 정렬 */
+  margin-top: calc((var(--fs-sm) * var(--lh-snug) - var(--sp-5)) / 2);
+  border-radius: var(--radius-round);
+  background: var(--c-accent-soft);
+  color: var(--c-accent-ink);
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-none);
+}
+
+.tip-t {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: block;
+}
+
+.tip-t b {
+  font-weight: var(--fw-semibold);
+  color: var(--c-ink);
+}
+
+
+/* ---------- 15. 처리 중 (스피너 · 진행바) ------------------ */
+.proc {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  padding: var(--sp-8) var(--sp-4);
+  text-align: center;
+}
+
+.spinner {
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  border: var(--spinner-w) solid var(--c-line);
+  border-top-color: var(--c-accent);
+  border-radius: var(--radius-round);
+  animation: spin var(--dur-spin) linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.proc-text {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  color: var(--c-ink);
+}
+
+.bar {
+  width: 100%;
+  max-width: calc(var(--app-max-w) - var(--sp-9));
+  height: var(--bar-h);
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--c-sunken);
+}
+
+.bar-fill {
+  width: 0;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--c-accent);
+  transition: width var(--dur-4) var(--ease-standard);
+}
+
+.proc-sub {
+  font-size: var(--fs-sm);
+  color: var(--c-ink-3);
+}
+
+
+/* ---------- 16. 카드 스택 (확정 화면) ---------------------- */
+/* DOM은 역순(맨 위 카드가 마지막 자식)이라 z-index 없이 자연히 겹친다.
+   비침 정도는 각 카드의 인라인 --depth (0 = 맨 위) 로 계산한다. */
+/* 스택은 남는 공간을 전부 차지하고(줄어들 수도 있고),
+   .stackbar 와 그 아래 버튼은 항상 화면 안에 남는다 */
+.stackwrap {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: var(--sp-1) var(--sp-1) var(--sp-2);
+}
+
+.stack {
+  position: relative;
+  width: 100%;
+  max-width: calc(var(--app-max-w) - var(--sp-7));
+  max-height: 100%;
+  aspect-ratio: var(--stack-ratio);
+  margin-inline: auto;
+  touch-action: pan-y;
+}
+
+.qcard {
+  --depth: 0;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  overflow: hidden;
+  border: var(--border-w) solid var(--c-line);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface);
+  box-shadow: var(--shadow-card);
+  transform-origin: center top;
+  will-change: transform;
+  user-select: none;
+  -webkit-user-select: none;
+  /* depth에 비례해 아래로 내려가고, 작아지고, 흐려진다 */
+  transform:
+    translateY(calc(var(--depth) * var(--stack-peek-y)))
+    scale(calc(1 - var(--depth) * var(--stack-peek-scale)));
+  opacity: calc(1 - var(--depth) * var(--stack-peek-fade));
+  transition:
+    transform var(--dur-3) var(--ease-emphasized),
+    opacity var(--dur-3) var(--ease-standard);
+}
+
+/* 맨 위 카드만 조작 대상 */
+.qcard:not(.is-top) { pointer-events: none; }
+.qcard.is-top { cursor: grab; }
+
+/* 드래그 중에는 transition을 꺼서 손가락을 그대로 따라오게 (JS가 인라인 transform 설정) */
+.qcard.is-dragging {
+  transition: none;
+  cursor: grabbing;
+}
+
+/* 실패 카드 — 경고 톤 */
+.qcard.is-fail {
+  border-color: var(--c-fail-line);
+  background: var(--c-fail-bg);
+}
+
+.qcard-img {
+  flex: 0 0 auto;
+  height: var(--qcard-img-h);
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  pointer-events: none;
+}
+
+.qcard-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* 실패 카드는 원본 사진이라 꽉 채워도 된다 */
+.qcard.is-fail .qcard-img img { object-fit: cover; }
+
+.qcard-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.qcard-body::-webkit-scrollbar { display: none; }
+
+/* 카드 안 칩줄은 카드 밖으로 삐져나오지 않게 */
+.qcard-body .chiprow {
+  padding: var(--sp-1) var(--sp-0) var(--sp-1);
+  margin-inline: var(--sp-0);
+  max-width: 100%;
+}
+
+/* 사진 회전 — 확정 카드와 상세 양쪽에서 이미지 바로 아래에 놓인다 */
+.rotate-row {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+}
+
+.rotatebtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--rotatebtn-size);
+  height: var(--rotatebtn-size);
+  border: var(--border-w) solid var(--c-line);
+  border-radius: var(--radius-round);
+  background: var(--c-surface);
+  color: var(--c-ink-2);
+  font-size: var(--fs-lg);
+  line-height: var(--lh-none);
+  transition:
+    background var(--dur-1) var(--ease-standard),
+    opacity var(--dur-1) var(--ease-standard),
+    transform var(--dur-1) var(--ease-standard);
+}
+
+.rotatebtn:active {
+  transform: scale(0.94);
+  background: var(--c-sunken);
+}
+
+.rotatebtn[disabled] {
+  opacity: var(--op-disabled);
+  color: var(--c-ink-3);
+  background: var(--c-sunken);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* 추출된 색 표시줄 */
+.qcard-colors,
+.detail-colors {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+/* 색 견본 — background는 인라인 스타일이 지정하므로 여기서 건드리지 않는다 */
+.swatch {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: var(--swatch-size);
+  height: var(--swatch-size);
+  border-radius: var(--radius-round);
+  border: var(--border-w) solid var(--c-line-strong);
+}
+
+.qcard-colorname,
+.detail-colorname {
+  margin-inline-start: var(--sp-1);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--c-ink-2);
+}
+
+/* 실패 안내 */
+.fail-title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--c-ink-3);
+}
+
+.fail-msg {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  color: var(--c-danger-ink);
+}
+
+.fail-note {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-snug);
+  color: var(--c-ink-3);
+}
+
+.stackbar {
+  flex: 0 0 auto;
+  display: flex;
+  gap: var(--sp-3);
+}
+
+.stackbar .btn { flex: 1 1 0; }
+
+/* 단계 맨 아래에 직접 놓인 버튼들도 밀려 잘리지 않게 */
+.step > .btn { flex: 0 0 auto; }
+
+/* 세로 여유가 있는 화면에서는 이미지를 조금 더 크게 */
+@media (min-height: 720px) {
+  .qcard-img { height: var(--qcard-img-h-tall); }
+}
+
+
+/* ---------- 16-1. 입력 필드 (확정 카드 · 상세 공용) -------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 0;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--c-ink-3);
+}
+
+.field-val {
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-wide);
+  color: var(--c-accent);
+}
+
+/* 슬라이더 — 모바일에서 만지기 쉽게 트랙·썸을 키운다 */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: var(--tap-min);
+  margin: var(--sp-0);
+  background: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-runnable-track {
+  height: var(--slider-track-h);
+  border-radius: var(--radius-pill);
+  background: var(--c-sunken);
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--slider-thumb);
+  height: var(--slider-thumb);
+  margin-top: calc((var(--slider-track-h) - var(--slider-thumb)) / 2);
+  border: var(--border-w-strong) solid var(--c-surface);
+  border-radius: var(--radius-round);
+  background: var(--c-primary);
+  box-shadow: var(--shadow-2);
+}
+
+.slider::-moz-range-track {
+  height: var(--slider-track-h);
+  border-radius: var(--radius-pill);
+  background: var(--c-sunken);
+}
+
+.slider::-moz-range-thumb {
+  width: var(--slider-thumb);
+  height: var(--slider-thumb);
+  border: var(--border-w-strong) solid var(--c-surface);
+  border-radius: var(--radius-round);
+  background: var(--c-primary);
+  box-shadow: var(--shadow-2);
+}
+
+
+/* ---------- 17. 완료 요약 --------------------------------- */
+.done {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-8) var(--sp-2);
+  text-align: center;
+}
+
+.done-art {
+  font-size: var(--fs-art);
+  line-height: var(--lh-tight);
+}
+
+.done-title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semibold);
+  color: var(--c-ink);
+}
+
+.done-desc {
+  margin-bottom: var(--sp-4);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--c-ink-3);
+}
+
+.done .btn-wide { max-width: calc(var(--app-max-w) - var(--sp-8)); }
+
+
+/* ---------- 18. 아이템 상세 ------------------------------- */
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  width: 100%;
+  max-width: var(--app-max-w);
+  margin-inline: auto;
+  padding: var(--sp-5) var(--gutter) var(--sp-8);
+}
+
+.detail-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: var(--border-w) solid var(--c-line);
+  border-radius: var(--radius-lg);
+}
+
+.detail-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.detail-worn {
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--radius-md);
+  background: var(--c-surface-2);
+  border: var(--border-w) solid var(--c-line);
+  font-size: var(--fs-sm);
+  color: var(--c-ink-2);
+}
+
+/* 상세의 칩줄은 좌우 여백을 화면 여백에 맞춘다 */
+.detail .chiprow {
+  padding-inline: var(--sp-0);
+  padding-block: var(--sp-1);
+}
+
+
+/* ---------- 19. 토스트 ------------------------------------ */
+.toast {
+  position: fixed;
+  z-index: 80;
+  left: 50%;
+  bottom: calc(var(--tabbar-h) + var(--sp-5) + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  max-width: calc(var(--app-max-w) - var(--sp-7));
+  width: max-content;
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: var(--radius-pill);
+  background: var(--c-toast-bg);
+  color: var(--c-toast-ink);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  text-align: center;
+  box-shadow: var(--shadow-toast);
+  pointer-events: none;
+  animation: toast-in var(--dur-2) var(--ease-out) both;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, var(--toast-enter-y)); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+
+/* ---------- 19-1. 날씨 (오늘 코디 상단) -------------------- */
+.weather {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  padding: var(--sp-1) var(--gutter) var(--sp-4);
+}
+
+/* 버튼이지만 정보 표시가 주 목적 — 채우지 않고, 누를 수 있다는 정도만 보인다 */
+.weather-main {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--sp-3) var(--sp-4);
+  border: var(--border-w) solid var(--c-line);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface);
+  text-align: start;
+  transition:
+    background var(--dur-1) var(--ease-standard),
+    transform var(--dur-1) var(--ease-standard);
+}
+
+.weather-main:active {
+  transform: scale(0.99);
+  background: var(--c-surface-2);
+}
+
+.weather-emoji {
+  flex: 0 0 auto;
+  font-size: var(--fs-xl);
+  line-height: var(--lh-none);
+}
+
+.weather-temp {
+  flex: 0 0 auto;
+  font-size: var(--fs-temp);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-none);
+  color: var(--c-ink);
+}
+
+.weather-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: var(--fs-md);
+  color: var(--c-ink-2);
+}
+
+.weather-src {
+  padding-inline: var(--sp-2);
+  font-size: var(--fs-xxs);
+  color: var(--c-ink-3);
+}
+
+/* 위치 거부·오프라인일 때만 나타나는 수동 기온 */
+.temp-manual {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin-top: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border: var(--border-w) solid var(--c-line);
+  border-radius: var(--radius-md);
+  background: var(--c-surface-2);
+}
+
+.temp-manual-label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--c-ink-3);
+}
+
+.temp-manual-val {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--c-accent);
+}
+
+
+/* ---------- 19-2. 코디 카드 ------------------------------- */
+.outfits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-1) var(--gutter) var(--sp-9);
+}
+
+.outfit {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: var(--border-w) solid var(--c-line);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface);
+  box-shadow: var(--shadow-2);
+  animation: outfit-in var(--dur-3) var(--ease-out) both;
+}
+
+/* 3장이 살짝 순차로 올라온다 */
+.outfit:nth-child(2) { animation-delay: var(--stagger); }
+.outfit:nth-child(3) { animation-delay: calc(var(--stagger) * 2); }
+
+@keyframes outfit-in {
+  from { opacity: 0; transform: translateY(var(--outfit-enter-y)); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 합성 이미지는 1:1. 투명 배경일 수 있어 옅은 바닥을 깐다 (체크무늬는 쓰지 않는다) */
+.outfit-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--c-tint);
+  border-bottom: var(--border-w) solid var(--c-line);
+}
+
+.outfit-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.outfit-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+}
+
+/* 추천 이유 — 이미지 다음으로 중요한 요소 */
+.outfit-why {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-tight);
+  color: var(--c-ink);
+}
+
+.outfit-list {
+  font-size: var(--fs-xs);
+  line-height: var(--lh-snug);
+  color: var(--c-ink-3);
+}
+
+.outfit-acts {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+.outfit-acts .btn {
+  flex: 1 1 0;
+  min-width: 0;
+  padding-inline: var(--sp-3);
+}
+
+
+/* ---------- 19-3. 조건 완화 · 부족 안내 -------------------- */
+/* 경고가 아니라 담담한 고백 — 정보 톤 */
+.relaxed-note {
+  margin: var(--sp-0) var(--gutter) var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--radius-md);
+  background: var(--c-info-soft);
+  color: var(--c-info-ink);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+/* 옷장 화면 필터 아래 상시 힌트 — 더 낮은 강도 */
+.gap-note {
+  margin: var(--sp-0) var(--gutter) var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-sm);
+  background: var(--c-info-soft);
+  color: var(--c-info-ink);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-snug);
+}
+
+/* 추천 0건 — 빈 상태에 가깝게, 다음 행동으로 이어지는 톤 */
+.shortage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: var(--sp-2) var(--gutter) var(--sp-6);
+  padding: var(--sp-7) var(--sp-5);
+  border: var(--border-w) dashed var(--c-line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface-2);
+  text-align: center;
+}
+
+.shortage-title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  color: var(--c-ink);
+}
+
+.shortage-desc {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--c-ink-3);
+}
+
+.shortage .btn {
+  margin-top: var(--sp-3);
+  min-width: 60%;
+}
+
+
+/* ---------- 19-4. 설정 확장 ------------------------------- */
+/* label로 만든 행 안 버튼 — <button> 과 같게 보인다 (.btn 이 폰트·색을 모두 정함) */
+.row-act {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.install-tip {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin: var(--sp-0) var(--gutter) var(--sp-4);
+  padding: var(--sp-4);
+  border: var(--border-w) solid var(--c-accent-soft);
+  border-radius: var(--radius-md);
+  background: var(--c-accent-soft);
+}
+
+.install-tip-title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  color: var(--c-accent-ink);
+}
+
+.install-tip-desc {
+  font-size: var(--fs-xs);
+  line-height: var(--lh-relaxed);
+  color: var(--c-ink-2);
+}
+
+/* 데이터가 사라질 수 있다는 실질적 경고 — relaxed-note 보다 확실히 강하게 */
+.backup-warn {
+  margin: var(--sp-0) var(--gutter) var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  border: var(--border-w) solid var(--c-warn-line);
+  border-inline-start: var(--border-w-strong) solid var(--c-warn-ink);
+  border-radius: var(--radius-md);
+  background: var(--c-warn-soft);
+  color: var(--c-warn-ink);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+}
+
+
+/* ---------- 19-5. 마스크 아이콘 · 일러스트 ----------------- */
+/* SVG는 stroke/fill="currentColor" 라서 <img> 로 넣으면 다크 모드에서 검게 나온다.
+   그래서 mask-image 로 모양만 가져오고 배경색을 currentColor 로 칠한다.
+   → 색은 주변 글자색을 그대로 따라오고, 파일은 계속 assets/ 를 참조하므로
+     같은 경로에 더 좋은 SVG를 덮어쓰면 그대로 교체된다.
+   url() 은 이 스타일시트(css/) 기준 상대 경로다. */
+.ico,
+.art,
+.logo {
+  display: inline-block;
+  flex-shrink: 0;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+}
+
+/* 마스크를 지원할 때만 색을 칠한다 — 미지원 구형 브라우저에서 빈 사각형이 남지 않게 */
+@supports ((mask-image: none) or (-webkit-mask-image: none)) {
+  .ico,
+  .art,
+  .logo {
+    background-color: var(--c-current);
+  }
+}
+
+.ico {
+  width: var(--ico-size);
+  height: var(--ico-size);
+}
+
+/* 탭 아이콘: assets/<data-ico>.svg */
+.ico[data-ico="tab-closet"] {
+  mask-image: url("../assets/tab-closet.svg");
+  -webkit-mask-image: url("../assets/tab-closet.svg");
+}
+.ico[data-ico="tab-today"] {
+  mask-image: url("../assets/tab-today.svg");
+  -webkit-mask-image: url("../assets/tab-today.svg");
+}
+.ico[data-ico="tab-settings"] {
+  mask-image: url("../assets/tab-settings.svg");
+  -webkit-mask-image: url("../assets/tab-settings.svg");
+}
+
+/* 카테고리 아이콘: assets/icon-<data-ico>.svg */
+.ico[data-ico="outer"] {
+  mask-image: url("../assets/icon-outer.svg");
+  -webkit-mask-image: url("../assets/icon-outer.svg");
+}
+.ico[data-ico="top"] {
+  mask-image: url("../assets/icon-top.svg");
+  -webkit-mask-image: url("../assets/icon-top.svg");
+}
+.ico[data-ico="bottom"] {
+  mask-image: url("../assets/icon-bottom.svg");
+  -webkit-mask-image: url("../assets/icon-bottom.svg");
+}
+.ico[data-ico="dress"] {
+  mask-image: url("../assets/icon-dress.svg");
+  -webkit-mask-image: url("../assets/icon-dress.svg");
+}
+.ico[data-ico="shoes"] {
+  mask-image: url("../assets/icon-shoes.svg");
+  -webkit-mask-image: url("../assets/icon-shoes.svg");
+}
+.ico[data-ico="bag"] {
+  mask-image: url("../assets/icon-bag.svg");
+  -webkit-mask-image: url("../assets/icon-bag.svg");
+}
+.ico[data-ico="acc"] {
+  mask-image: url("../assets/icon-acc.svg");
+  -webkit-mask-image: url("../assets/icon-acc.svg");
+}
+
+/* 묶음 카테고리 버튼 안에서는 조금 크게 (아이콘 위 · 라벨 아래) */
+.catbtn .ico {
+  width: var(--ico-size-cat);
+  height: var(--ico-size-cat);
+  color: var(--c-ink-2);
+}
+
+.catbtn.is-on .ico { color: var(--c-accent-ink); }
+
+/* 빈 옷장 일러스트 — 마스크 안 투명도 단계(0.85/0.55/0.30)가 농담으로 살아난다 */
+.art[data-art="empty-closet"] {
+  width: var(--art-empty-w);
+  height: var(--art-empty-h);
+  max-width: 100%;
+  aspect-ratio: var(--art-empty-ratio);
+  color: var(--c-ink-2);
+  opacity: var(--art-opacity);
+  mask-image: url("../assets/empty-closet.svg");
+  -webkit-mask-image: url("../assets/empty-closet.svg");
+}
+
+/* 워드마크 로고 — 170:32 가로형 */
+.logo[data-art="logo"] {
+  width: var(--logo-w);
+  height: var(--logo-h);
+  aspect-ratio: var(--logo-ratio);
+  mask-image: url("../assets/logo.svg");
+  -webkit-mask-image: url("../assets/logo.svg");
+}
+
+
+/* ---------- 20. 유틸리티 ---------------------------------- */
+/* 누끼(투명 배경) 확인용 체크무늬 — CSS만으로 */
+.checker {
+  background-color: var(--c-checker-a);
+  background-image:
+    conic-gradient(
+      var(--c-checker-b) 0deg 90deg,
+      var(--c-transparent) 90deg 180deg,
+      var(--c-checker-b) 180deg 270deg,
+      var(--c-transparent) 270deg 360deg
+    );
+  background-size: calc(var(--checker-size) * 2) calc(var(--checker-size) * 2);
+  background-position: 0 0;
+}
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--c-scrim);
+}
+
+
+/* ---------- 21. 모션 축소 선호 ---------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 1ms !important;   /* 순차 등장 지연도 없앤다 */
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .spinner {
+    animation: spin calc(var(--dur-spin) * 3) linear infinite !important;
+  }
+}
